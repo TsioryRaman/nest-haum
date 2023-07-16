@@ -8,12 +8,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './Dto/create-user.dto';
 import { User } from './entity/user.entity';
 import { UpdateUserDto } from './Dto/update-user.dto';
 import { UpdateResult } from 'typeorm';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -28,11 +30,8 @@ export class UserController {
   async create(@Body() user: CreateUserDto) {
     try {
       return this.userService.create(user);
-    } catch (e) {
-      throw new HttpException(
-        'Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    } catch (Exception) {
+      return Exception;
     }
   }
 
@@ -51,6 +50,7 @@ export class UserController {
    * @returns 
    */
   @Get(':id')
+  @UseGuards(AuthGuard)
   findById(@Param() params:any):Promise<User>{
     try{
       return this.userService.findById(params.id);
