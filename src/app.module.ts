@@ -3,8 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import database from './database/database';
 import { DataSource } from 'typeorm';
-import { PersonModule } from './User/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: ['.env.development.local', '.env.development'],
       isGlobal: true,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
