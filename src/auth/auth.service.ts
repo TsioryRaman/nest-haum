@@ -12,7 +12,12 @@ export class AuthService {
   ) {}
 
   async signIn(signInDto: SignInDTO): Promise<any> {
-    const user = await this.userService.findBy(signInDto.username);
+    let user;
+    try{
+      user = await this.userService.findBy(signInDto.username);
+    }catch(erro){
+      throw new UnauthorizedException();
+    }
     // Comparaison du MDP
     if (user) {
       const isMatch = await bcrypt.compare(signInDto.password, user.password);
@@ -30,5 +35,6 @@ export class AuthService {
         }),
       };
     }
+
   }
 }
