@@ -15,7 +15,7 @@ import { CreateUserDto } from './Dto/create-user.dto';
 import { User } from './entity/user.entity';
 import { UpdateUserDto } from './Dto/update-user.dto';
 import { UpdateResult } from 'typeorm';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('user')
 export class UserController {
