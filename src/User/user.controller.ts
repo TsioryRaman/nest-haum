@@ -15,7 +15,7 @@ import { CreateUserDto } from './Dto/create-user.dto';
 import { User } from './entity/user.entity';
 import { UpdateUserDto } from './Dto/update-user.dto';
 import { UpdateResult } from 'typeorm';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -28,11 +28,7 @@ export class UserController {
    */
   @Post()
   async create(@Body() user: CreateUserDto) {
-    try {
       return this.userService.create(user);
-    } catch (Exception) {
-      return Exception;
-    }
   }
 
   /**

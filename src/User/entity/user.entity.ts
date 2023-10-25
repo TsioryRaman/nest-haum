@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Rocco } from "src/rocco/entity/rocco.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -16,6 +17,9 @@ export class User {
 
     @Column({nullable:false})
     password:string;
+
+    @OneToOne(()=>Rocco)
+    rocco: Rocco;
 
     @Column({nullable:false})
     address:string;

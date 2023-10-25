@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, Length } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
+import { Rocco } from "src/rocco/entity/rocco.entity";
 
 export class CreateUserDto{
     id:number;
@@ -10,6 +11,8 @@ export class CreateUserDto{
     @IsNotEmpty()
     @Length(3,255)
     lastname:string;
+    
+    rocco:Rocco;
 
     @IsNotEmpty()
     @Length(5,255)

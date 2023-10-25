@@ -6,11 +6,13 @@ import { CreateUserDto } from './Dto/create-user.dto';
 import { UpdateUserDto } from './Dto/update-user.dto';
 import { validate } from 'class-validator';
 import * as bcrypt from 'bcrypt';
+import { Rocco } from 'src/rocco/entity/rocco.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Rocco) private roccoRepository: Repository<Rocco>
   ) {}
 
   /**
@@ -19,17 +21,37 @@ export class UserService {
    * @returns {User}
    */
   async create(user: CreateUserDto) {
+    console.log("ici");
+    let _rocco:Rocco;
 
-    const _user = await this.userRepository.findBy({
-      email: user.email,
+    try{
+      _rocco = await this.roccoRepository.findOneByOrFail({
+        passKey: user.rocco.passKey
+      })
+    }catch(e)
+    {
+      throw new HttpException({passKey:"Desole,ce clef de produit ROCCO n'existe pas"},HttpStatus.EXPECTATION_FAILED)
+    }
+
+    if(_rocco.user)
+    {
+    throw new HttpException({passKey:"Desole,ce clef de produit ROCCO est deja utilise par un autre compte,veuillez essayer un nouveau"},HttpStatus.CONFLICT)
+    }
+
+    let _user = await this.userRepository.findOneBy({
       username: user.username,
     });
 
-    console.log(_user)
-    if(_user.length > 0){
-      console.log("LOL")
-      throw new HttpException("username or email already exists",HttpStatus.CONFLICT);
-      return;
+    if(_user){
+      throw new HttpException({username:"Ce nom d'utilisateur a ete deja utilise avec un autre compte"},HttpStatus.CONFLICT);
+    }
+
+    _user = await this.userRepository.findOneBy({
+      email: user.email,
+    });
+
+    if(_user){
+      throw new HttpException({email:"Cet email a ete deja utilise avec un autre compte"},HttpStatus.CONFLICT);
     }
 
     try {
@@ -39,9 +61,12 @@ export class UserService {
        */
       const password = await bcrypt.hash(user.password, saltOrRounds);
       user.password = password;
-      return this.userRepository.save(user);
+      let _user:User = user as User;
+      _rocco.user = _user;
+      const {user: _u} = await this.roccoRepository.save(_rocco);
+      return _u;
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw new HttpException("Error during saving user",HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

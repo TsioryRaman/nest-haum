@@ -3,6 +3,7 @@ import { UserService } from 'src/User/user.service';
 import * as bcrypt from 'bcrypt';
 import { SignInDTO } from './Dto/signin-dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserSignInType } from './types/userSigninTypes';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(signInDto: SignInDTO): Promise<any> {
+  async signIn(signInDto: SignInDTO): Promise<UserSignInType> {
     let user;
     try{
       user = await this.userService.findBy(signInDto.username);
