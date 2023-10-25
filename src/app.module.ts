@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { RoccoModule } from './rocco/rocco.module';
 @Module({
   imports: [
     database,
@@ -18,6 +19,7 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET,
     }),
     AuthModule,
+    RoccoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

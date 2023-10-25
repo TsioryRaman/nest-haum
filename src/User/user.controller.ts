@@ -28,11 +28,7 @@ export class UserController {
    */
   @Post()
   async create(@Body() user: CreateUserDto) {
-    try {
       return this.userService.create(user);
-    } catch (Exception) {
-      return Exception;
-    }
   }
 
   /**

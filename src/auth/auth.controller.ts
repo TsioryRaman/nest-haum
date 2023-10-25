@@ -2,7 +2,7 @@ import { Body, Controller, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { SignInDTO } from './Dto/signin-dto';
 import { AuthService } from './auth.service';
 
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
